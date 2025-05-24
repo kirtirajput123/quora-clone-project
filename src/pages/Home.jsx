@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase";  // Your Firebase config
-import { SearchBar, QuestionList } from "../components/SearchComponents"; 
+import { db } from "../firebase";
+import { SearchBar, QuestionList } from "../components/SearchComponents";
 
 const Home = () => {
   const [questions, setQuestions] = useState([]);
@@ -27,20 +27,22 @@ const Home = () => {
         setLoading(false);
       }
     };
+
     fetchQuestions();
   }, []);
 
-  // Filter questions based on searchTerm (case insensitive)
+  // ✅ Live filtered questions
   const filteredQuestions = questions.filter((q) =>
-    q.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    q.body?.toLowerCase().includes(searchTerm.toLowerCase())
+    q.questionText?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div style={{ padding: "20px" }}>
       <SearchBar setSearchTerm={setSearchTerm} />
+
       {loading && <p>Loading questions...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
+
       {!loading && !error && (
         <QuestionList questions={filteredQuestions} searchTerm={searchTerm} />
       )}
